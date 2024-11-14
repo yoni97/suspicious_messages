@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime,
 
 from base.base import Base
+from models.device_info import DeviceInfoModel
+from models.location import LocationModel
 
 
 class EmailModel(Base):
@@ -10,6 +12,6 @@ class EmailModel(Base):
     username = Column(String)
     ip_address = Column(String)
     created_at = Column(DateTime)
-    # location =
-    # device_info =
-    # sentences =
+    location = LocationModel
+    device_info = DeviceInfoModel
+    sentences = List[]
