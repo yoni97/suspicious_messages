@@ -1,6 +1,8 @@
 from kafka import KafkaConsumer
 import json
-from database.mongo_db import collection
+
+from consumers.message_consumer import email
+from database.postgres_db import db_session
 
 # Kafka consumer setup
 consumer = KafkaConsumer(
@@ -13,6 +15,6 @@ consumer = KafkaConsumer(
 
 for message in consumer:
     email = message.value
-    collection.insert_one(email)
-
+    db_session.add(email)
+    db_session.commit()
     print(f"Stored suspicious email: {email}")
