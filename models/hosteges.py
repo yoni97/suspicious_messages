@@ -3,11 +3,10 @@ from sqlalchemy.orm import relationship
 
 from base.base import Base
 
+class HostageModel(Base):
+    __tablename__ = 'hostages'
 
-class ExplosModel(Base):
-    __tablename__ = 'explos'
-
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True) # PK int
     email_id = Column(Integer, ForeignKey("emails.id"))
 
-    email = relationship("EmailsModel", back_populates="explos")
+    email = relationship("EmailsModel", back_populates="hostages")

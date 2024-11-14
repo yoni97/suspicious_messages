@@ -16,11 +16,11 @@ producer = KafkaProducer(
 @suspicious_email_bp.route('/api/email', methods=['POST'])
 def get_email():
     data = request.get_json()
-    producer.send('get_email', value=data)
+    producer.send("messages.all", value=data)
     if not data:
         return jsonify({"error": "Invalid data"}), 400
 
-    producer.send("messages.all", value=data)
+    producer.send('get_email', value=data)
     print(f"Sent {data} to messages.all")
 
     send_to_topic_based_on_keywords(data)
@@ -71,16 +71,13 @@ def get_most_common_word():
     if not email:
         return jsonify({"error": "Email parameter is required"}), 400
 
-    # שליפת כל המשפטים החשודים עבור האימייל המסוים משתי הטבלאות
     hostage_sentences = EmailModel.query.with_entities(EmailModel.sentence).filter_by(
         email=email).all()
     explosive_sentences = EmailModel.query.with_entities(EmailModel.sentence).filter_by(
         email=email).all()
 
-    # שילוב כל המשפטים לרשימה אחת
     all_sentences = [sentence[0] for sentence in hostage_sentences + explosive_sentences]
 
-    # חלוקה למילים ומציאת השכיחויות
     word_counter = Counter()
     for sentence in all_sentences:
         words = sentence.lower().split()
@@ -97,7 +94,3 @@ def get_most_common_word():
         "most_common_word": most_common_word,
         "occurrences": count
     }), 200
-
-
-
-

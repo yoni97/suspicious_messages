@@ -8,12 +8,11 @@ consumer = KafkaConsumer(
     'messages.all',
     bootstrap_servers=['kafka:9092'],
     auto_offset_reset='earliest',
-    group_id='messages',
+    group_id='emails',
     value_deserializer=lambda m: json.loads(m.decode('utf-8'))
 )
 
 for message in consumer:
     email = message.value
-    regular_email = EmailModel(email)
     collection.insert_one(email)
     print(f"Stored email message: {email}")

@@ -10,7 +10,7 @@ consumer = KafkaConsumer(
     'messages.hostage',
     bootstrap_servers=['kafka:9092'],
     auto_offset_reset='earliest',
-    group_id='messages',
+    group_id='emails',
     value_deserializer=lambda m: json.loads(m.decode('utf-8'))
 )
 

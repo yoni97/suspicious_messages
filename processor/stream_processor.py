@@ -5,7 +5,7 @@ consumer = KafkaConsumer(
     'get_email',
     bootstrap_servers='localhost:9092',
     auto_offset_reset='earliest',
-    group_id='transactions',
+    group_id='emails',
     enable_auto_commit=True,
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
@@ -15,7 +15,6 @@ producer = KafkaProducer(bootstrap_servers='localhost:9092',
 
 for message in consumer:
     decoded_message = message.value['sentences']
-    producer.send('messages.all', value=decoded_message)
     sorted_list_by_danger = []
     for sentence in decoded_message:
         if 'explos' in decoded_message[sentence]:

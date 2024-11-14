@@ -51,6 +51,20 @@ services:
       timeout: 5s
       retries: 5
 
+  app:
+    build: ./app
+    container_name: app
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: curl --fail http://localhost:5000/ || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      kafka:
+        condition: service_healthy
+
   processor:
     build: ./processor
     container_name: stream-processor
