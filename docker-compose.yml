@@ -24,53 +24,62 @@ services:
       retries: 5
 
   mongodb:
-    image: mongo:4.4
-    container_name: mongodb
+    image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-        - ./mongo-data-4-4:/data/db
+      - mongo_data:/data/db
+
+  db-sql:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: suspicious_emails
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     healthcheck:
-      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  transaction-producer:
-    build: ./transaction-producer
-    container_name: transaction-producer
-    depends_on:
-      kafka:
-        condition: service_healthy
-
-  stream-processor:
-    build: ./stream-processor
+  processor:
+    build: ./processor
     container_name: stream-processor
     depends_on:
       kafka:
         condition: service_healthy
 
-  fraud-consumer:
-    build: ./fraud-consumer
-    container_name: fraud-consumer
+  explosive-consumer:
+    build: ./explosive-consumer
+    container_name: explosive-consumer
     depends_on:
       kafka:
         condition: service_healthy
-      mongodb:
+      db-sql:
         condition: service_healthy
 
-  high-value-consumer:
-    build: ./high-value-consumer
-    container_name: high-value-consumer
+  hostage-consumer:
+    build: ./hostage-consumer
+    container_name: hostage-consumer
     depends_on:
       kafka:
         condition: service_healthy
-      mongodb:
+      db-sql:
           condition: service_healthy
 
-  transaction-logger:
-    build: ./transaction-logger
-    container_name: transaction-logger
+  all_message-consumer:
+    build: ./all_message-consumer
+    container_name: all_message-consumer
     depends_on:
       kafka:
         condition: service_healthy
+      mongodb:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  mongo_data:
