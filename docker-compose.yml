@@ -14,7 +14,6 @@ services:
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_CREATE_TOPICS: "transactions:3:1, fraud_alerts:3:1, high_value_transactions:3:1"
     depends_on:
       - zookeeper
     healthcheck:
@@ -24,11 +23,17 @@ services:
       retries: 5
 
   mongodb:
-    image: mongo:latest
+    image: mongo:4.4
+    container_name: mongodb
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:/data/db
+      - ./mongo-data-4-4:/data/db
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   db-sql:
     image: postgres:13
@@ -83,3 +88,18 @@ services:
 volumes:
   db_data:
   mongo_data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

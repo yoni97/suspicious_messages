@@ -20,13 +20,13 @@ for message in consumer:
     for sentence in decoded_message:
         if 'explos' in decoded_message[sentence]:
             sorted_list_by_danger.append(sentence)
-            producer.send('messages.explosive', value=decoded_message)
+            producer.send('messages.explosive', value=sentence)
 
         if 'hostage' in decoded_message[sentence]:
             sorted_list_by_danger.append(sentence)
-            producer.send('messages.hostage', value=decoded_message)
+            producer.send('messages.hostage', value=sentence)
 
-        print(f'Email {decoded_message} is  sent!')
+        print(f'Email {sentence} is  sent!')
 
 producer.flush()
 producer.close()

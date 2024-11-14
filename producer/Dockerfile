@@ -11,6 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
-EXPOSE 5001
+EXPOSE 5004
 
-CMD ["python", "app.py"]
+CMD ["python", "get_emails_route.py"]

@@ -6,11 +6,11 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY requirements.txt /app/
+COPY . /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
-EXPOSE 5001
+EXPOSE 5002
 
-CMD ["python", "app.py"]
+CMD ["python", "explos_consumer.py"]
