@@ -14,5 +14,4 @@ consumer = KafkaConsumer(
 for message in consumer:
     email = message.value
     collection.insert_one(email)
-
     print(f"Stored email message: {email}")
