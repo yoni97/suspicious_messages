@@ -15,14 +15,17 @@ producer = KafkaProducer(bootstrap_servers='localhost:9092',
 
 for message in consumer:
     decoded_message = message.value['sentences']
+    producer.send('messages.all', value=decoded_message)
+    sorted_list_by_danger = []
     for sentence in decoded_message:
         if 'explos' in decoded_message[sentence]:
+            sorted_list_by_danger.append(sentence)
             producer.send('messages.explosive', value=decoded_message)
 
         if 'hostage' in decoded_message[sentence]:
+            sorted_list_by_danger.append(sentence)
             producer.send('messages.hostage', value=decoded_message)
 
-        producer.send('messages.all', value=decoded_message)
         print(f'Email {decoded_message} is  sent!')
 
 producer.flush()

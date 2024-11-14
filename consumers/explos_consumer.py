@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 import json
 from database.postgres_db import db_session
+from models.email import EmailModel
 
 consumer = KafkaConsumer(
     'messages.explosive',
@@ -12,6 +13,7 @@ consumer = KafkaConsumer(
 
 for message in consumer:
     email = message.value
-    db_session.add(email)
+    danger_email = EmailModel(email)
+    db_session.add(danger_email)
     db_session.commit()
     print(f"Stored suspicious email: {email}")
