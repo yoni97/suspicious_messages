@@ -14,4 +14,4 @@ class EmailModel(Base):
     created_at = Column(DateTime)
     location = LocationModel
     device_info = DeviceInfoModel
-    sentences = List[]
+    sentences =
